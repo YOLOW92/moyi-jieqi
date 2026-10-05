@@ -4,10 +4,10 @@
 
 ## 下载
 
-在本仓库的 **Releases** 页面下载：
+在本仓库的 [Releases](https://github.com/YOLOW92/moyi-jieqi/releases) 页面下载（仅 Windows x64）：
 
-- **便携版**：`墨弈全混揭棋-便携版.exe`，双击即玩，无需安装。
-- **安装版**：`墨弈全混揭棋-安装版.exe`，可以选择安装目录。
+- **便携版**：`moyi-jieqi-<版本>-portable.exe`，双击即玩，无需安装。
+- **安装版**：`moyi-jieqi-<版本>-setup.exe`，可以选择安装目录。
 
 也可以按下文「开发」一节从源码自行打包，产物在 `release/` 目录。
 
