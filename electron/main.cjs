@@ -43,7 +43,7 @@ function createWindow() {
           }
           if (step.shot) {
             const image = await win.webContents.capturePage();
-            fs.writeFileSync(step.shot, image.toPNG());
+            fs.writeFileSync(step.shot, /\.jpe?g$/i.test(step.shot) ? image.toJPEG(88) : image.toPNG());
             console.log('[shot]', step.shot);
           }
         } catch (error) {
