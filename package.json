@@ -1,0 +1,59 @@
+{
+  "name": "ink-xiangqi",
+  "productName": "墨弈·全混揭棋",
+  "version": "2.0.0",
+  "description": "水墨风 3D 全混揭棋",
+  "author": "wyc610721 <wyc610721@gmail.com>",
+  "license": "GPL-3.0-only",
+  "private": true,
+  "type": "module",
+  "main": "electron/main.cjs",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build && node scripts/strip-woff.mjs",
+    "test": "vitest run",
+    "electron": "electron .",
+    "start": "npm run build && electron .",
+    "dist": "npm run build && electron-builder --win portable nsis"
+  },
+  "build": {
+    "appId": "com.ink.xiangqi",
+    "productName": "墨弈全混揭棋",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "package.json"
+    ],
+    "win": {
+      "icon": "build/icon.png",
+      "artifactName": "${productName}-${version}-${arch}.${ext}"
+    },
+    "portable": {
+      "artifactName": "${productName}-便携版.exe"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "artifactName": "${productName}-安装版.exe"
+    },
+    "asar": true,
+    "compression": "maximum"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/three": "^0.186.0",
+    "electron": "^44.5.1",
+    "electron-builder": "^26.15.3",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.2",
+    "vitest": "^5.0.3",
+    "@fontsource/liu-jian-mao-cao": "^5.3.0",
+    "@fontsource/ma-shan-zheng": "^5.3.1",
+    "@fontsource/noto-serif-sc": "^5.3.0",
+    "gsap": "^3.15.0",
+    "three": "^0.186.1"
+  }
+}

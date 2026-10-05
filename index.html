@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' data: blob:; script-src 'self' 'unsafe-inline' blob:; worker-src 'self' blob:" />
+    <title>墨弈·全混揭棋</title>
+  </head>
+  <body>
+    <div id="stage"></div>
+
+    <!-- 对局界面 -->
+    <div id="hud" class="hud" hidden>
+      <header class="turn">
+        <div class="seal" id="turn-seal"><span id="turn-seal-char">红</span></div>
+        <div class="turn-text">
+          <div class="turn-title" id="turn-title">红方行棋</div>
+          <div class="turn-sub" id="turn-sub">本地双人</div>
+        </div>
+      </header>
+
+      <aside class="panel" id="panel">
+        <section class="players">
+          <div class="player" data-color="red">
+            <span class="player-dot"></span>
+            <span class="player-name" id="name-red">红方</span>
+            <span class="thinking" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="player-lost" id="lost-red">失 0</span>
+          </div>
+          <div class="player" data-color="black">
+            <span class="player-dot"></span>
+            <span class="player-name" id="name-black">黑方</span>
+            <span class="thinking" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="player-lost" id="lost-black">失 0</span>
+          </div>
+        </section>
+        <section class="rogue" id="rogue" hidden>
+          <div class="rogue-head">
+            <span class="rogue-stage" id="rogue-stage">第一盘 · 第一幕</span>
+            <span class="rogue-ink" id="rogue-ink">墨锭 0</span>
+          </div>
+          <div class="rogue-hint" id="rogue-hint"></div>
+          <div class="rogue-row"><label>敌势</label><div class="chips" id="rogue-enemy"></div></div>
+          <div class="rogue-row"><label>所得</label><div class="chips" id="rogue-owned"></div></div>
+          <div class="talismans" id="rogue-talismans"></div>
+        </section>
+        <div class="panel-heading"><span>棋谱</span></div>
+        <ol class="moves" id="moves"></ol>
+        <div class="stats" id="stats">未揭 30 · 闲着 0/60</div>
+        <div class="actions">
+          <button class="ink-btn" data-act="undo" title="悔棋 (Ctrl+Z)">悔棋</button>
+          <button class="ink-btn" data-act="hint" title="提示 (H)">提示</button>
+          <button class="ink-btn" data-act="draw" title="求和">求和</button>
+          <button class="ink-btn" data-act="resign" title="认输">认输</button>
+          <button class="ink-btn small" data-act="flip" title="翻转视角 (F)">视角</button>
+          <button class="ink-btn small" data-act="rules" title="规则 (F1)">规则</button>
+          <button class="ink-btn small" data-act="settings" title="设置">设置</button>
+          <button class="ink-btn small" data-act="menu" title="回到卷首 (Esc)">卷首</button>
+        </div>
+      </aside>
+    </div>
+
+    <!-- 卷首（开始菜单） -->
+    <div id="menu" class="menu" hidden>
+      <div class="menu-wash"></div>
+      <div class="menu-inner">
+        <div class="title-block">
+          <h1 class="title" id="title"><span>墨</span><span>弈</span></h1>
+          <div class="subtitle" id="subtitle">全 混 揭 棋</div>
+          <div class="title-seal">揭棋</div>
+          <p class="verse" id="verse">落子无悔 · 翻面见真</p>
+        </div>
+        <nav class="menu-list" id="menu-main">
+          <button class="menu-btn" data-act="continue" hidden><b>续</b><span>继续对局</span></button>
+          <button class="menu-btn" data-act="local"><b>对</b><span>双人对弈</span></button>
+          <button class="menu-btn" data-act="ai"><b>机</b><span>人机对弈</span></button>
+          <button class="menu-btn" data-act="rogue"><b>途</b><span>墨途闯关</span></button>
+          <button class="menu-btn" data-act="rules"><b>规</b><span>棋规</span></button>
+          <button class="menu-btn" data-act="settings"><b>设</b><span>设置</span></button>
+          <button class="menu-btn" data-act="quit"><b>离</b><span>离开</span></button>
+        </nav>
+        <div class="menu-sub" id="menu-ai" hidden>
+          <h2 class="sub-title">择 对 手</h2>
+          <div class="choice-row" id="difficulty">
+            <button class="choice" data-value="easy"><b>初</b><span>初学</span><small>落子轻快</small></button>
+            <button class="choice selected" data-value="normal"><b>弈</b><span>棋手</span><small>攻守有度</small></button>
+            <button class="choice" data-value="expert"><b>宗</b><span>宗师</span><small>深算两秒</small></button>
+          </div>
+          <h2 class="sub-title">执 子</h2>
+          <div class="choice-row" id="side">
+            <button class="choice seal-choice red selected" data-value="red"><b>红</b><span>执红先行</span></button>
+            <button class="choice seal-choice black" data-value="black"><b>黑</b><span>执黑后手</span></button>
+            <button class="choice seal-choice" data-value="random"><b>？</b><span>随缘</span></button>
+          </div>
+          <div class="sub-actions">
+            <button class="ink-btn" data-act="back">返回</button>
+            <button class="ink-btn primary" data-act="start-ai">开 局</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="banner" class="banner" aria-live="polite"></div>
+    <div id="toasts" class="toasts"></div>
+    <div id="dialogs"></div>
+    <canvas id="ink-overlay"></canvas>
+    <div id="loading" class="loading"><div class="loading-enso"></div><div class="loading-text">研墨中</div></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
